@@ -2,13 +2,13 @@
 import CustomModal from "@/components/common/modal";
 import RegistrationForm from "@/forms/registration.form";
 import {FormikContext, useFormik} from "formik";
-import * as yup from "yup";
 import {Form} from "@heroui/form";
 import {addToast, Button, Spinner} from "@heroui/react";
 import React, {useState} from "react";
 import classNames from "classnames";
 import {registerUser} from "@/actions/register";
 import {IFormDataRegister} from "@/types/form-data";
+import {RegisterSchema} from "@/schema/register.schema";
 
 interface Iprops {
     isOpen: boolean;
@@ -51,13 +51,7 @@ const RegistrationModal = ({isOpen, onOpenChange}: Iprops) => {
             password: '',
             passwordConfirm: '',
         },
-        validationSchema: yup.object({
-            email: yup.string().email('Невалидный емейл').required('Емейл обязателен'),
-            password: yup.string().min(6, 'Пароль должен быть минимум 6 символов').required('Пароль обязателен'),
-            passwordConfirm: yup.string()
-                .oneOf([yup.ref('password')], 'Пароли должны совпадать')
-                .required('Подтверждение пароля обязательно'),
-        }),
+        validationSchema: RegisterSchema,
         onSubmit: onSubmitHandler
     });
 

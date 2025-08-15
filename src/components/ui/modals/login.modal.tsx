@@ -3,7 +3,7 @@ import CustomModal from "@/components/common/modal";
 import LoginForm from "@/forms/login.form";
 import {Button, Form} from "@heroui/react";
 import {FormikContext, useFormik} from "formik";
-import * as yup from "yup";
+import {LoginSchema} from "@/schema/login.schema";
 
 interface Iprops {
     isOpen: boolean;
@@ -18,10 +18,7 @@ const LoginModal = ({isOpen, onOpenChange, onRegistrationChange}: Iprops) => {
             email: '',
             password: '',
         },
-        validationSchema: yup.object({
-            email: yup.string().email('Невалидный емейл').required('Емейл обязателен'),
-            password: yup.string().min(6, 'Пароль должен быть минимум 6 символов').required('Пароль обязателен'),
-        }),
+        validationSchema: LoginSchema,
         onSubmit: (values) => {
             console.log('Form submitted:', values);
         },
