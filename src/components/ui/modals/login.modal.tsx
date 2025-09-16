@@ -4,6 +4,10 @@ import LoginForm from "@/forms/login.form";
 import {Button, Form} from "@heroui/react";
 import {FormikContext, useFormik} from "formik";
 import {LoginSchema} from "@/schema/login.schema";
+import {useState} from "react";
+import {signInWithCredentials} from "@/actions/sign-in";
+import {SESSION_STATUS, useAuthStore} from "@/store/auth.store";
+import {useSession} from "next-auth/react";
 
 interface Iprops {
     isOpen: boolean;
@@ -13,6 +17,10 @@ interface Iprops {
 
 const LoginModal = ({isOpen, onOpenChange, onRegistrationChange}: Iprops) => {
 
+    const [loading, setLoading] = useState(false);
+    const {setAuthState} = useAuthStore();
+    const {update} = useSession();
+
     const formik = useFormik({
         initialValues: {
             email: '',
@@ -20,7 +28,14 @@ const LoginModal = ({isOpen, onOpenChange, onRegistrationChange}: Iprops) => {
         },
         validationSchema: LoginSchema,
         onSubmit: (values) => {
-            console.log('Form submitted:', values);
+            setLoading(true);
+            signInWithCredentials(values.email, values.password)
+                .then(async (res) => {
+                    onOpenChange(false);
+                    setAuthState(SESSION_STATUS.Authenticated, res);
+                    window.location.reload();
+                })
+                .finally(() => setLoading(false));
         },
     });
 
@@ -47,6 +62,8 @@ const LoginModal = ({isOpen, onOpenChange, onRegistrationChange}: Iprops) => {
                         <Button
                             className="bg-linear-to-tr from-pink-500 to-yellow-500 text-white shadow-lg"
                             type="submit"
+                            isLoading={loading}
+                            onPress={formik.submitForm}
                         >
                             Логин
                         </Button>

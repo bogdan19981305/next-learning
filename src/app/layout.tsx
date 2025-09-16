@@ -6,6 +6,7 @@ import Header from "@/components/ui/header";
 import {siteConfig} from "@/config/site.config";
 import {auth} from "@/auth/auth";
 import {SessionProvider} from "next-auth/react";
+import AppLoader from "@/hoc/app-loader";
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -37,13 +38,17 @@ const session = await auth();
       >
       <Providers>
           <SessionProvider session={session}>
-            <Header />
-            {children}
-              <footer>
-                <div className="text-center text-sm text-gray-500 py-4">
-                  © {new Date().getFullYear()} {siteConfig.title}. All rights reserved.
-                </div>
-              </footer>
+              <AppLoader>
+                  <>
+                      <Header />
+                      {children}
+                      <footer>
+                          <div className="text-center text-sm text-gray-500 py-4">
+                              © {new Date().getFullYear()} {siteConfig.title}. All rights reserved.
+                          </div>
+                      </footer>
+                  </>
+              </AppLoader>
           </SessionProvider>
       </Providers>
       </body>
