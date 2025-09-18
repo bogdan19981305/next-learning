@@ -20,12 +20,24 @@ const IngredientsPage = () => {
     validateOnChange: false,
     enableReinitialize: true,
     onSubmit: async (values,formikHelpers) => {
-      await createIngredient(values);
-      formikHelpers.setSubmitting(false);
-      addToast({
-        title: "Инградиент успешно добавлен",
-        color: "success",
-      })
+      try {
+        await createIngredient(values);
+        formikHelpers.setSubmitting(false);
+        addToast({
+          title: "Инградиент успешно добавлен",
+          color: "success",
+        });
+        formikHelpers.resetForm();
+      }catch (e) {
+        addToast({
+            title: "Ошибка при добавлении ингредиента",
+            color: "danger",
+        });
+        console.error(e);
+      }finally {
+        formikHelpers.setSubmitting(false);
+      }
+
     },
   });
 
