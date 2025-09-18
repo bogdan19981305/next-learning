@@ -1,14 +1,39 @@
+"use client";
+import IngredientForm from "@/forms/ingredient.form";
+import {FormikProvider, useFormik} from "formik";
+import {createIngredient} from "@/actions/ingredient";
+import {CreateIngredient} from "@/types/form-data";
+import {addToast} from "@heroui/react";
+import {createIngredientSchema} from "@/schema/ingredient.schema";
+
 const IngredientsPage = () => {
+  const formik = useFormik<CreateIngredient>({
+    initialValues: {
+      name: "",
+      category: null,
+      unit: null,
+      price: null,
+      description: "",
+    },
+    validationSchema: createIngredientSchema,
+    validateOnBlur: true,
+    validateOnChange: false,
+    enableReinitialize: true,
+    onSubmit: async (values,formikHelpers) => {
+      await createIngredient(values);
+      formikHelpers.setSubmitting(false);
+      addToast({
+        title: "Инградиент успешно добавлен",
+        color: "success",
+      })
+    },
+  });
+
   return (
     <div className="flex flex-col items-center justify-center h-screen">
-      <h1 className="text-4xl font-bold mb-4">Ingredients Page</h1>
-      <p className="text-lg text-center max-w-2xl">
-        This page will display a list of ingredients for various recipes. You can browse through the ingredients
-        and find detailed information about each one, including their uses in Tatar cuisine.
-      </p>
-      <p className="text-lg text-center max-w-2xl mt-4">
-        Stay tuned as we continue to add more ingredients and recipes to our collection!
-      </p>
+      <FormikProvider value={formik}>
+        <IngredientForm />
+      </FormikProvider>
     </div>
   );
 };

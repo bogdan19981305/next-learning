@@ -1,7 +1,6 @@
 const RecipesPage = () => {
     return (
         <div className="flex flex-col items-center justify-center h-screen">
-            <h1 className="text-4xl font-bold mb-4">Recipes Page</h1>
             <p className="text-lg text-center max-w-2xl">
                 This page will display a list of recipes for various Tatar dishes. You can browse through
                 the recipes and find detailed information about each one, including ingredients, preparation steps,

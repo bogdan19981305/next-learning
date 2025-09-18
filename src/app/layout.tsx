@@ -7,6 +7,7 @@ import {siteConfig} from "@/config/site.config";
 import {auth} from "@/auth/auth";
 import {SessionProvider} from "next-auth/react";
 import AppLoader from "@/hoc/app-loader";
+import Title from "@/components/ui/title";
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -28,29 +29,30 @@ export default async function RootLayout({
 }: Readonly<{
   children: React.ReactNode;
 }>) {
-
-const session = await auth();
+  const session = await auth();
 
   return (
-    <html lang="en">
+    <html lang="en" className="dark">
       <body
-        className={`${geistSans.variable} ${geistMono.variable} antialiased`}
+        className={`${geistSans.variable} ${geistMono.variable}`}
       >
-      <Providers>
+        <Providers>
           <SessionProvider session={session}>
-              <AppLoader>
-                  <>
-                      <Header />
-                      {children}
-                      <footer>
-                          <div className="text-center text-sm text-gray-500 py-4">
-                              © {new Date().getFullYear()} {siteConfig.title}. All rights reserved.
-                          </div>
-                      </footer>
-                  </>
-              </AppLoader>
+            <AppLoader>
+              <main className="dark text-foreground bg-background">
+                <Header />
+                <Title />
+                {children}
+                <footer>
+                  <div className="text-center text-sm text-gray-500 py-4">
+                    © {new Date().getFullYear()} {siteConfig.title}. All rights
+                    reserved.
+                  </div>
+                </footer>
+              </main>
+            </AppLoader>
           </SessionProvider>
-      </Providers>
+        </Providers>
       </body>
     </html>
   );

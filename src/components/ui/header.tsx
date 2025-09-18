@@ -6,7 +6,6 @@ import RegistrationModal from "@/components/ui/modals/registration.modal";
 import LoginModal from "@/components/ui/modals/login.modal";
 import {signOutFunc} from "@/actions/sign-out";
 import {SESSION_STATUS, useAuthStore} from "@/store/auth.store";
-import {useSession} from "next-auth/react";
 
 const {navItems} = siteConfig;
 
@@ -27,8 +26,7 @@ export default function Header() {
 
     const {isOpen: isRegistrationOpen, onOpenChange: onOpenRegistrationChange, onOpen: onRegitrationOpen} = useDisclosure();
     const {isOpen: isLoginOpen, onOpenChange: onOpenLoginChange, onOpen: onLoginOpen} = useDisclosure();
-    const {isAuth,setAuthState, session, status} = useAuthStore();
-    const {update} = useSession();
+    const {isAuth,setAuthState, status} = useAuthStore();
 
 
     const handleSignOut = async () => {
