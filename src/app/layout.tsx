@@ -1,11 +1,11 @@
-import type {Metadata} from "next";
-import {Geist, Geist_Mono} from "next/font/google";
-import {Providers} from "./providers";
+import type { Metadata } from "next";
+import { Geist, Geist_Mono } from "next/font/google";
+import { Providers } from "./providers";
 import "./globals.css";
 import Header from "@/components/ui/header";
-import {siteConfig} from "@/config/site.config";
-import {auth} from "@/auth/auth";
-import {SessionProvider} from "next-auth/react";
+import { siteConfig } from "@/config/site.config";
+import { auth } from "@/auth/auth";
+import { SessionProvider } from "next-auth/react";
 import AppLoader from "@/hoc/app-loader";
 import Title from "@/components/ui/title";
 
@@ -33,9 +33,7 @@ export default async function RootLayout({
 
   return (
     <html lang="en" className="dark">
-      <body
-        className={`${geistSans.variable} ${geistMono.variable}`}
-      >
+      <body className={`${geistSans.variable} ${geistMono.variable}`}>
         <Providers>
           <SessionProvider session={session}>
             <AppLoader>

@@ -1,21 +1,36 @@
-'use client';
-import {useSession} from "next-auth/react";
-import {parseSessionStatus, SESSION_STATUS, useAuthStore} from "@/store/auth.store";
-import {ReactNode, useEffect} from "react";
+"use client";
+import { useSession } from "next-auth/react";
+import {
+  parseSessionStatus,
+  SESSION_STATUS,
+  useAuthStore,
+} from "@/store/auth.store";
+import { ReactNode, useEffect } from "react";
+import { useIngredientStore } from "@/store/ingredient.store";
 
 interface Props {
-    children: ReactNode;
+  children: ReactNode;
 }
 
-const AppLoader = ({children}: Props) => {
-    const {data: session, status} = useSession();
-    const {setAuthState} = useAuthStore();
+const AppLoader = ({ children }: Props) => {
+  const { data: session, status } = useSession();
+  const { loadIngredients } = useIngredientStore();
+  const { setAuthState, isAuth } = useAuthStore();
 
-    useEffect(() => {
-        setAuthState(parseSessionStatus(status) || SESSION_STATUS.Unauthenticated, session ?? null);
-    }, [status, session, setAuthState]);
+  useEffect(() => {
+    setAuthState(
+      parseSessionStatus(status) || SESSION_STATUS.Unauthenticated,
+      session ?? null
+    );
+  }, [status, session, setAuthState]);
 
-    return <>{children}</>;
-}
+  useEffect(() => {
+    if (isAuth) {
+      loadIngredients();
+    }
+  }, [isAuth, loadIngredients]);
+
+  return <>{children}</>;
+};
 
 export default AppLoader;
