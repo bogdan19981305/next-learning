@@ -7,6 +7,7 @@ import {
 } from "@/store/auth.store";
 import { ReactNode, useEffect } from "react";
 import { useIngredientStore } from "@/store/ingredient.store";
+import { useRecipesStore } from "@/store/recipes.store";
 
 interface Props {
   children: ReactNode;
@@ -15,6 +16,7 @@ interface Props {
 const AppLoader = ({ children }: Props) => {
   const { data: session, status } = useSession();
   const { loadIngredients } = useIngredientStore();
+  const { loadRecipes } = useRecipesStore();
   const { setAuthState, isAuth } = useAuthStore();
 
   useEffect(() => {
@@ -29,6 +31,12 @@ const AppLoader = ({ children }: Props) => {
       loadIngredients();
     }
   }, [isAuth, loadIngredients]);
+
+  useEffect(() => {
+    if (isAuth) {
+      loadRecipes();
+    }
+  }, [isAuth, loadRecipes]);
 
   return <>{children}</>;
 };

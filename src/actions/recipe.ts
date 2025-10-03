@@ -1,12 +1,13 @@
+"use server";
 import { Recipe } from "@/generated/prisma";
-import { CreateRecipeDto } from "@/types/form-data";
+import { CreateRecipeDto, IRecipe } from "@/types/form-data";
 import { prisma } from "@/utils/prisma";
 import { createRecipeSchema, updateRecipeSchema } from "@/schema/recipe.schema";
 
 export const getRecipes = async (): Promise<{
   success: boolean;
-  data?: Recipe[];
-  message?: string;
+  data?: IRecipe[];
+  message?: string | null;
 }> => {
   try {
     const recipes = await prisma.recipe.findMany({
@@ -29,8 +30,8 @@ export const createRecipe = async (
   recipe: CreateRecipeDto
 ): Promise<{
   success: boolean;
-  data?: Recipe;
-  message?: string;
+  data?: IRecipe | null;
+  message?: string | null;
 }> => {
   try {
     if (!recipe.ingredients.length) {
@@ -115,5 +116,21 @@ export const updateRecipe = async (
   } catch (error) {
     console.error(error);
     return { success: false, message: "Error updating recipe" };
+  }
+};
+
+export const deleteRecipe = async (
+  recipeId: string
+): Promise<{
+  success: boolean;
+  message?: string;
+}> => {
+  try {
+    await prisma.recipeIngredient.deleteMany({ where: { recipeId } });
+    await prisma.recipe.delete({ where: { id: recipeId } });
+    return { success: true, message: "Recipe deleted successfully" };
+  } catch (error) {
+    console.error(error);
+    return { success: false, message: "Error deleting recipe" };
   }
 };

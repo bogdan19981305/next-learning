@@ -1,4 +1,4 @@
-import { Category, Unit } from "@/generated/prisma";
+import { Category, Unit, Ingredient } from "@/generated/prisma";
 
 export interface IFormDataRegister {
   email: string;
@@ -18,5 +18,21 @@ export interface CreateRecipeDto {
   name: string;
   description: string | null;
   imageUrl: string | null;
-  ingredients: { id: string; quantity: number }[];
+  ingredients: IRecipeIngredient[];
+}
+
+export interface IRecipeIngredient {
+  id: string;
+  quantity: number;
+  ingredient: Ingredient;
+}
+
+export interface IRecipe {
+  id: string;
+  name: string;
+  description: string | null;
+  imageUrl: string | null;
+  ingredients: IRecipeIngredient[];
+  createdAt: Date;
+  updatedAt: Date;
 }
